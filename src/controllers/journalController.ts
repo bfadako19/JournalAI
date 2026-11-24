@@ -3,7 +3,7 @@ import { getAllJournalEntries } from "../services/journalService.js";
 
 export async function getJournalEntries(req: Request, res: Response) {
     try {
-        const entries = await getAllJournalEntries();
+        const entries = await getAllJournalEntries(req.user!.userId);
 
         res.status(200).json({
             message: "Journal entries retrieved successfully",
