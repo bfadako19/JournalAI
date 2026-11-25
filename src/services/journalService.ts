@@ -9,3 +9,21 @@ export async function getAllJournalEntries(userId: string) {
     return result.rows;
 
 }
+
+export async function createJournalEntry(userId: string, title: string, content: string) {
+     const result = await pool.query(
+        "INSERT INTO journal_entries (user_id, title, content) VALUES ($1, $2, $3) RETURNING *",
+        [userId, title, content]
+    )
+
+    return result.rows[0];
+
+}
+export async function updateJournalEntry(id: string, userId: string, title: string, content: string) {
+     const result = await pool.query(
+        "UPDATE journal_entries SET title = $1, content = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 AND user_id = $4 RETURNING *",
+        [title, content, id, userId]
+     )
+     return result.rows[0];
+
+}
