@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getAllJournalEntries, createJournalEntry, updateJournalEntry } from "../services/journalService.js";
+import { getAllJournalEntries, createJournalEntry, updateJournalEntry, deleteJournalEntry } from "../services/journalService.js";
 
 export async function getJournalEntries(req: Request, res: Response) {
     try {
@@ -85,3 +85,28 @@ export async function updateJournal(req: Request<{ id: string }>, res: Response)
         });
 }
 }
+export async function deleteJournal(req: Request<{id:string}>, res: Response){
+    try {
+        const id = req.params.id
+        const deletedEntry = await deleteJournalEntry(id, req.user!.userId);
+        
+    if (!deletedEntry) {
+            res.status(404).json({
+                message: "Journal entry not found.",
+                deletedEntry
+            });
+            return;
+        }
+
+     res.status(200).json({
+            message: "Journal entry deleted successfully",
+        });
+    } catch (error) {
+        console.error("Error deleting journal entry:", error);
+
+        res.status(500).json({
+            message: "Internal server error"
+        });
+}
+}
+

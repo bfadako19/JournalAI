@@ -27,3 +27,10 @@ export async function updateJournalEntry(id: string, userId: string, title: stri
      return result.rows[0];
 
 }
+export async function deleteJournalEntry(id: string, userId: string){
+    const result = await pool.query(
+        "DELETE FROM journal_entries WHERE id = $1 AND user_id = $2 RETURNING *",
+        [id, userId]
+    )
+    return result.rows[0];
+}
